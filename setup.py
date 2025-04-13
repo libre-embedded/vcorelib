@@ -1,7 +1,7 @@
 # =====================================
 # generator=datazen
-# version=3.1.4
-# hash=2dd482c8bf7dce8141fb36a697c152aa
+# version=3.2.0
+# hash=bbe5f8609924df0c07b92d9324f2bbc1
 # =====================================
 
 """
@@ -18,9 +18,9 @@ except (ImportError, ModuleNotFoundError):
 from vcorelib import DESCRIPTION, PKG_NAME, VERSION
 
 author_info = {
-    "name": "Vaughn Kottler",
+    "name": "Libre Embedded",
     "email": "vaughn@libre-embedded.com",
-    "username": "vkottler",
+    "username": "libre-embedded",
 }
 pkg_info = {
     "name": PKG_NAME,
