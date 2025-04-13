@@ -1,29 +1,22 @@
 <!--
     =====================================
     generator=datazen
-    version=3.1.4
-    hash=21410b79de6b0348c9dd40d18f7bca26
+    version=3.2.0
+    hash=d707f53d0aaf20f5f4a3a51d838d04c1
     =====================================
 -->
 
-# vcorelib ([3.5.2](https://pypi.org/project/vcorelib/))
+# vcorelib ([3.5.3](https://pypi.org/project/vcorelib/))
 
 [![python](https://img.shields.io/pypi/pyversions/vcorelib.svg)](https://pypi.org/project/vcorelib/)
-![Build Status](https://github.com/vkottler/vcorelib/workflows/Python%20Package/badge.svg)
-[![codecov](https://codecov.io/gh/vkottler/vcorelib/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/github/vkottler/vcorelib)
+![Build Status](https://github.com/libre-embedded/vcorelib/workflows/Python%20Package/badge.svg)
+[![codecov](https://codecov.io/gh/libre-embedded/vcorelib/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/github/libre-embedded/vcorelib)
 ![PyPI - Status](https://img.shields.io/pypi/status/vcorelib)
 ![Dependents (via libraries.io)](https://img.shields.io/librariesio/dependents/pypi/vcorelib)
 
 *A collection of core Python utilities.*
 
-## Documentation
-
-### Generated
-
-* By [sphinx-apidoc](https://vkottler.github.io/python/sphinx/vcorelib)
-(What's [`sphinx-apidoc`](https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html)?)
-* By [pydoc](https://vkottler.github.io/python/pydoc/vcorelib.html)
-(What's [`pydoc`](https://docs.python.org/3/library/pydoc.html)?)
+([interface documentation](https://libre-embedded.github.io/python/vcorelib))
 
 ## Python Version Support
 
