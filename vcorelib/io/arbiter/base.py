@@ -271,8 +271,6 @@ class DataArbiterBase:
                         logger=logger,
                         strategy=strategy,
                     )
-                    if result:
-                        files_loaded.append(include)
 
                 for include in consume(
                     result.data, f"{includes_key}_left", []
@@ -292,8 +290,6 @@ class DataArbiterBase:
                         logger=logger,
                         strategy=strategy,
                     )
-                    if result:
-                        files_loaded.append(include)
 
         if not result.success:
             logger.error("Failed to decode '%s'.", path)
