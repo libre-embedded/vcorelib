@@ -8,11 +8,9 @@ from contextlib import contextmanager as _contextmanager
 import logging as _logging
 from pathlib import Path as _Path
 from typing import Callable as _Callable
-from typing import Dict as _Dict
 from typing import Iterator as _Iterator
 from typing import NamedTuple
 from typing import Optional as _Optional
-from typing import Tuple as _Tuple
 
 # internal
 from vcorelib.dict.cache import FileCache
@@ -94,7 +92,7 @@ class FileInfoManager:
     def __init__(
         self,
         poll_cb: FileChangedCallback,
-        initial: _Dict[_Path, FileInfo] = None,
+        initial: dict[_Path, FileInfo] = None,
         logger: LoggerType = None,
         level: int = _logging.DEBUG,
         check_contents: bool = True,
@@ -167,7 +165,7 @@ class FileInfoManager:
 
     def _poll_path(
         self, path: _Path
-    ) -> _Tuple[_Optional[FileChangeEvent], _Optional[FileInfo]]:
+    ) -> tuple[_Optional[FileChangeEvent], _Optional[FileInfo]]:
         """Get information about a file-system path."""
 
         change = None

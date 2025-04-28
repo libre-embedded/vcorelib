@@ -8,7 +8,7 @@ from enum import Enum, auto
 from io import StringIO
 import os
 from pathlib import Path
-from typing import Callable, Iterator, List, Optional, TextIO, Tuple
+from typing import Callable, Iterator, Optional, TextIO
 
 # third-party
 import markdown
@@ -38,8 +38,8 @@ class CommentStyle(Enum):
         return f"# {data}"
 
 
-LineWithComment = Tuple[str, Optional[str]]
-LinesWithComments = List[LineWithComment]
+LineWithComment = tuple[str, Optional[str]]
+LinesWithComments = list[LineWithComment]
 
 MARKDOWN_EXTENSIONS = ["extra"]
 

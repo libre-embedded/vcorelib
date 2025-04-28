@@ -11,9 +11,7 @@ from logging import LoggerAdapter as _LoggerAdapter
 from math import floor as _floor
 from time import perf_counter_ns as _perf_counter_ns
 from typing import Any as _Any
-from typing import Dict as _Dict
 from typing import Iterator as _Iterator
-from typing import Tuple as _Tuple
 from typing import Union as _Union
 
 # internal
@@ -58,7 +56,7 @@ def simulated_time(
         yield simulated
 
 
-def seconds_str(seconds: int) -> _Tuple[str, int]:
+def seconds_str(seconds: int) -> tuple[str, int]:
     """
     Attempt to characterize a large amount of seconds into a string describing
     hours and minutes, returning the string (may be empty) and the seconds
@@ -141,7 +139,7 @@ class Timer:
         """Initialize this timer."""
 
         self.curr: int = 0
-        self.data: _Dict[int, int] = {}
+        self.data: dict[int, int] = {}
 
     @contextmanager
     def measure_ns(self) -> _Iterator[int]:

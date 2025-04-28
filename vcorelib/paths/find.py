@@ -7,7 +7,6 @@ from pathlib import Path as _Path
 from typing import Callable as _Callable
 from typing import Iterable as _Iterable
 from typing import Optional as _Optional
-from typing import Union as _Union
 from urllib.parse import ParseResult as _ParseResult
 from urllib.parse import urlparse as _urlparse
 
@@ -115,7 +114,7 @@ register_file_finder("package", find_package_file)
 
 def find_file(
     path: Pathlike,
-    *parts: _Union[str, _Path],
+    *parts: str | _Path,
     search_paths: _Iterable[Pathlike] = None,
     include_cwd: bool = False,
     relative_to: Pathlike = None,

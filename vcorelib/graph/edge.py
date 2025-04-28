@@ -3,7 +3,6 @@ A module for defining and working with graph edges.
 """
 
 # built-in
-from typing import Dict as _Dict
 from typing import NamedTuple
 from typing import Optional as _Optional
 from typing import TextIO as _TextIO
@@ -11,7 +10,7 @@ from typing import TextIO as _TextIO
 # internal
 from vcorelib.graph.port import Port as _Port
 
-AttributeMap = _Dict[str, str]
+AttributeMap = dict[str, str]
 
 
 def write_attributes(stream: _TextIO, data: AttributeMap = None) -> None:

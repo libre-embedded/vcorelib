@@ -6,13 +6,12 @@ data structures.
 # built-in
 from os import environ as _environ
 from typing import Any as _Any
-from typing import List as _List
 from typing import Mapping as _Mapping
 
 # internal
 from vcorelib.dict import GenericDict as _GenericDict
 
-GenericList = _List[_Any]
+GenericList = list[_Any]
 
 
 def str_resolve_env_var(data: str, env: _Mapping[str, _Any] = None) -> str:
@@ -74,7 +73,7 @@ def dict_resolve_env_vars(
     in-place.
     """
 
-    keys_to_remove: _List[str] = []
+    keys_to_remove: list[str] = []
     to_update: _GenericDict = {}
 
     for key, value in data.items():

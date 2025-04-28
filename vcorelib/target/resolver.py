@@ -4,14 +4,10 @@ Implements management of target objects.
 
 # built-in
 from typing import Any as _Any
-from typing import Dict as _Dict
 from typing import Iterable as _Iterable
 from typing import Iterator as _Iterator
-from typing import List as _List
 from typing import NamedTuple as _NamedTuple
 from typing import Optional as _Optional
-from typing import Tuple as _Tuple
-from typing import Union as _Union
 
 # internal
 from vcorelib.target import LITERAL_MATCH as _LITERAL_MATCH
@@ -42,8 +38,8 @@ class TargetResolver:
     def __init__(self) -> None:
         """Initialize this target resolver."""
 
-        self.literals: _Dict[str, _Any] = {}
-        self.dynamic: _Dict[Target, _Any] = {}
+        self.literals: dict[str, _Any] = {}
+        self.dynamic: dict[Target, _Any] = {}
 
     def register(self, data: str, value: _Any = None) -> bool:
         """
@@ -74,7 +70,7 @@ class TargetResolver:
         if data in self.literals:
             return TargetResolution(_LITERAL_MATCH, self.literals[data])
 
-        matches: _List[_Tuple[Target, TargetMatch, _Any]] = []
+        matches: list[tuple[Target, TargetMatch, _Any]] = []
         for candidate, value in self.dynamic.items():
             test = candidate.evaluate(data)
             if test.matched:
@@ -93,7 +89,7 @@ class TargetResolver:
 
     def evaluate_all(
         self, data: _Iterable[str]
-    ) -> _Iterator[_Union[TargetResolution, str]]:
+    ) -> _Iterator[TargetResolution | str]:
         """
         Evaluate all targets and optionally enforce that they all matched.
         """

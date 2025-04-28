@@ -9,15 +9,11 @@ from abc import abstractmethod as _abstractmethod
 
 # built-in
 import re
-from typing import Dict as _Dict
 from typing import Generic as _Generic
-from typing import List as _List
 from typing import Optional as _Optional
-from typing import Tuple as _Tuple
 from typing import TypeVar as _TypeVar
-from typing import Union as _Union
 
-Substitutions = _Dict[str, _Union[str, int]]
+Substitutions = dict[str, str | int]
 T = _TypeVar("T", bound="TargetEvaluatorInterface")
 
 
@@ -25,7 +21,7 @@ class TargetEvaluatorInterface(_ABC):
     """An interface for evaluating targets."""
 
     def __init__(
-        self, original: str, keys: _List[str], markers: _List[_Tuple[int, int]]
+        self, original: str, keys: list[str], markers: list[tuple[int, int]]
     ) -> None:
         """Initialize this evaluator."""
 
@@ -128,8 +124,8 @@ class DynamicTargetEvaluator(TargetEvaluatorInterface):
         self,
         original: str,
         pattern: re.Pattern[str],
-        keys: _List[str],
-        markers: _List[_Tuple[int, int]],
+        keys: list[str],
+        markers: list[tuple[int, int]],
     ) -> None:
         """Initialize this evaluator."""
         self.pattern = pattern

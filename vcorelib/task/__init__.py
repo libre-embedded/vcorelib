@@ -13,12 +13,8 @@ from os import linesep as _linesep
 from typing import Any as _Any
 from typing import Callable as _Callable
 from typing import Coroutine as _Coroutine
-from typing import Dict as _Dict
 from typing import Iterable as _Iterable
-from typing import List as _List
 from typing import Optional as _Optional
-from typing import Set as _Set
-from typing import Tuple as _Tuple
 
 # internal
 from vcorelib.dict import merge_dicts
@@ -26,8 +22,8 @@ from vcorelib.logging import LoggerMixin
 from vcorelib.math.time import Timer, nano_str
 from vcorelib.target import Substitutions, Target
 
-Outbox = _Dict[str, _Any]
-Inbox = _Dict[str, Outbox]
+Outbox = dict[str, _Any]
+Inbox = dict[str, Outbox]
 TaskExecute = _Callable[[Inbox, Outbox], _Coroutine[_Any, _Any, bool]]
 TaskGenerator = _Callable[..., _asyncio.Task[_Any]]
 
@@ -40,7 +36,7 @@ class Task(LoggerMixin):  # pylint: disable=too-many-instance-attributes
     """A basic task interface definition."""
 
     stages = ["run_enter", "run", "run_exit"]
-    default_requirements: _Set[str] = set()
+    default_requirements: set[str] = set()
 
     def __init__(
         self,
@@ -57,16 +53,16 @@ class Task(LoggerMixin):  # pylint: disable=too-many-instance-attributes
         self.name = name
         self.inbox: Inbox = {}
         self.outbox: Outbox = {}
-        self.dependencies: _List[TaskGenerator] = []
+        self.dependencies: list[TaskGenerator] = []
         self._stack: _Optional[_ExitStack] = None
 
         # Dependency resolution state.
         self._resolved = False
-        self.literals: _Set[str] = set()
+        self.literals: set[str] = set()
 
         # Invocation state.
         self._continue = True
-        self._running: _Set[str] = set()
+        self._running: set[str] = set()
         self._to_signal: int = 0
         self._sem: _Optional[_asyncio.Semaphore] = None
 
@@ -259,7 +255,7 @@ class Task(LoggerMixin):  # pylint: disable=too-many-instance-attributes
         caller: "Task" = None,
         substitutions: Substitutions = None,
         **kwargs,
-    ) -> _Tuple[Substitutions, str]:
+    ) -> tuple[Substitutions, str]:
         """Perform some dispatch initialization."""
 
         self.times_invoked += 1

@@ -10,7 +10,6 @@ from logging import getLogger as _GetLogger
 from logging.handlers import QueueHandler
 from queue import SimpleQueue
 from typing import Iterator as _Iterator
-from typing import Tuple
 
 # internal
 from vcorelib.logging.args import (
@@ -60,7 +59,7 @@ def queue_handler(
     queue: LogRecordQueue = None,
     handler: QueueHandler = None,
     root_formatter: bool = True,
-) -> Tuple[LogRecordQueue, QueueHandler]:
+) -> tuple[LogRecordQueue, QueueHandler]:
     """
     Set up and return a simple queue and logging queue handler. Use the
     provided objects if they already exist.

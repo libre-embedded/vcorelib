@@ -6,7 +6,6 @@ A module exposing data-file encoders and decoders.
 from io import StringIO
 import logging
 from pathlib import Path
-from typing import List
 from typing import Optional as _Optional
 
 # third-party
@@ -143,7 +142,7 @@ class DataArbiterBase:
         maxsplit: int = 1,
         expect_overwrite: bool = False,
         strategy: MergeStrategy = MergeStrategy.RECURSIVE,
-        files_loaded: List[Path] = None,
+        files_loaded: list[Path] = None,
         **kwargs,
     ) -> LoadResult:
         """Attempt to load data from a file using asyncio."""
@@ -229,7 +228,7 @@ class DataArbiterBase:
         maxsplit: int = 1,
         expect_overwrite: bool = False,
         strategy: MergeStrategy = MergeStrategy.RECURSIVE,
-        files_loaded: List[Path] = None,
+        files_loaded: list[Path] = None,
         **kwargs,
     ) -> LoadResult:
         """Attempt to load data from a file."""

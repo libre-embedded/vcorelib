@@ -13,7 +13,7 @@ Pathlike = _Union[_Path, str, None]
 
 
 def normalize(
-    path: Pathlike, *parts: _Union[str, _Path], require: bool = False
+    path: Pathlike, *parts: str | _Path, require: bool = False
 ) -> _Path:
     """Normalize an input that could be a path into a path."""
     path = (

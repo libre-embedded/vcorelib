@@ -11,7 +11,6 @@ from typing import Iterator as _Iterator
 from typing import NamedTuple
 from typing import Optional as _Optional
 from typing import TextIO
-from typing import Tuple as _Tuple
 from typing import Union as _Union
 
 # third-party
@@ -168,7 +167,7 @@ class LoadResult(NamedTuple):
         assert isinstance(other, (LoadResult, tuple))
         return bool(self.data == other[0] and self.success == other[1])
 
-    def require_success(self, path: _Union[Path, str]) -> None:
+    def require_success(self, path: Path | str) -> None:
         """Raise a canonical exception if this result is a failure."""
         assert self.success, f"Couldn't load '{path}'!"
 
@@ -192,7 +191,7 @@ class LoadResult(NamedTuple):
         )
 
 
-EncodeResult = _Tuple[bool, int]
+EncodeResult = tuple[bool, int]
 DataStream = _Union[TextIO, StringIO]
 StreamProcessor = _Callable[[DataStream], DataStream]
 DataDecoder = _Callable[[DataStream, LoggerType], LoadResult]

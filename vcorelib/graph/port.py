@@ -7,10 +7,8 @@ from enum import auto as _auto
 
 # built-in
 from itertools import zip_longest as _zip_longest
-from typing import Dict as _Dict
 from typing import NamedTuple
 from typing import Optional as _Optional
-from typing import Set as _Set
 from typing import TextIO as _TextIO
 
 
@@ -79,14 +77,14 @@ class PortManager:
     def __init__(self) -> None:
         """Initialize this port manager."""
 
-        self.outputs: _Dict[str, Port] = {}
-        self.inputs: _Dict[str, Port] = {}
+        self.outputs: dict[str, Port] = {}
+        self.inputs: dict[str, Port] = {}
 
-    def inout_labels(self) -> _Set[str]:
+    def inout_labels(self) -> set[str]:
         """Get inout port labels."""
         return set(self.inputs.keys()).intersection(self.outputs.keys())
 
-    def input_labels(self, exclude_inout: bool = True) -> _Set[str]:
+    def input_labels(self, exclude_inout: bool = True) -> set[str]:
         """Get input port labels."""
 
         result = set(self.inputs.keys())
@@ -94,7 +92,7 @@ class PortManager:
             result -= self.inout_labels()
         return result
 
-    def output_labels(self, exclude_inout: bool = True) -> _Set[str]:
+    def output_labels(self, exclude_inout: bool = True) -> set[str]:
         """Get output port labels."""
 
         result = set(self.outputs.keys())

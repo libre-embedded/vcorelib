@@ -8,7 +8,6 @@ from asyncio.subprocess import Process as _Process
 from pathlib import Path as _Path
 from sys import executable as _executable
 from typing import Iterable as _Iterable
-from typing import List as _List
 
 # internal
 from vcorelib.asyncio.cli import (
@@ -150,7 +149,7 @@ class SubprocessLogMixin(Task):
     async def shell_cmd_in_dir(
         self,
         path: _Path,
-        cmd: _List[str],
+        cmd: list[str],
         joiner: str = " ",
         cd: str = "cd",
         **kwargs,

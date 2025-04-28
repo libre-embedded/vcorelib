@@ -9,10 +9,8 @@ from enum import Enum as _Enum
 from enum import auto as _auto
 from os import stat_result as _stat_result
 from pathlib import Path as _Path
-from typing import Dict as _Dict
 from typing import NamedTuple
 from typing import Optional as _Optional
-from typing import Tuple as _Tuple
 from typing import cast as _cast
 
 # internal
@@ -70,7 +68,7 @@ class FileInfo(NamedTuple):
 
     def poll(
         self, check_contents: bool = True
-    ) -> _Tuple[_Optional[FileChangeEvent], _Optional["FileInfo"]]:
+    ) -> tuple[_Optional[FileChangeEvent], _Optional["FileInfo"]]:
         """Determine if this file is in a new state or not."""
 
         if not self.path.is_file():
@@ -115,7 +113,7 @@ class FileInfo(NamedTuple):
     @staticmethod
     def from_json(
         data: _JsonObject, force: bool = False
-    ) -> _Dict[_Path, "FileInfo"]:
+    ) -> dict[_Path, "FileInfo"]:
         """Create file info from JSON data."""
 
         result = {}

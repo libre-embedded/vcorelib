@@ -10,7 +10,6 @@ from pathlib import Path
 import shutil
 import tarfile
 from typing import Optional as _Optional
-from typing import Tuple as _Tuple
 import zipfile
 
 # internal
@@ -58,7 +57,7 @@ def extractall(
     maxsplit: int = 1,
     tar_filter: str = "tar",
     **extract_kwargs,
-) -> _Tuple[bool, int]:
+) -> tuple[bool, int]:
     """
     Attempt to extract an arbitrary archive to a destination. Return whether or
     not this succeeded and how long it took.
@@ -96,7 +95,7 @@ def make_archive(
     ext_str: str = _DEFAULT_ARCHIVE_EXT,
     dst_dir: Path = None,
     **archive_kwargs,
-) -> _Tuple[_Optional[Path], int]:
+) -> tuple[_Optional[Path], int]:
     """
     Create an archive from a source directory, named after that directory,
     and optionally moved to a destination other than the parent directory

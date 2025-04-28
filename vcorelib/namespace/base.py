@@ -6,9 +6,7 @@ A module implementing a base namespace interface.
 from contextlib import contextmanager as _contextmanager
 from re import compile as _compile
 from typing import Iterator as _Iterator
-from typing import List as _List
 from typing import Optional as _Optional
-from typing import Set as _Set
 
 DEFAULT_DELIM = "."
 CPP_DELIM = "::"
@@ -25,8 +23,8 @@ class Namespace:
     ) -> None:
         """Initialize this namespace."""
 
-        self.stack: _List[str] = [*names]
-        self.names: _Set[str] = set()
+        self.stack: list[str] = [*names]
+        self.names: set[str] = set()
         self.delim = delim
         self.parent: _Optional["Namespace"] = parent
 
@@ -56,7 +54,7 @@ class Namespace:
 
     def length_sorted_suggestions(
         self, data: str, delta: bool = True
-    ) -> _List[str]:
+    ) -> list[str]:
         """Get suggestions (based on data) sorted by length."""
         return sorted(set(self.suggestions(data, delta=delta)), key=len)
 

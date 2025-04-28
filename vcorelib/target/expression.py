@@ -3,9 +3,7 @@ A module implementing expression evaluation for targets.
 """
 
 # built-in
-from typing import List as _List
 from typing import Optional as _Optional
-from typing import Tuple as _Tuple
 
 # internal
 from vcorelib.target import Target as _Target
@@ -57,7 +55,7 @@ class ExpressionTarget(_TargetInterface[ExpressionTargetEvaluator]):
         live = data
         abs_idx = 0
         keys = []
-        markers: _List[_Tuple[int, int]] = []
+        markers: list[tuple[int, int]] = []
         for _ in range(open_len):
             start = live.index(cls.dynamic_start)
             end = live.index(cls.dynamic_end)

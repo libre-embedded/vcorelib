@@ -5,7 +5,6 @@ A module implementing utilities for working with asyncio subprocesses.
 # built-in
 from asyncio import create_subprocess_exec
 from asyncio.subprocess import Process as _Process
-from typing import Tuple as _Tuple
 
 # internal
 from vcorelib.logging import LoggerType
@@ -16,7 +15,7 @@ from vcorelib.platform import reconcile_platform
 
 def log_process_info(
     program: str, *args: str, base: _Pathlike = None
-) -> _Tuple[str, str]:
+) -> tuple[str, str]:
     """
     Get a relative-path program string and a space-delimeted string of the
     arguments, which have also been shortened against a possible relative path.
@@ -34,7 +33,7 @@ async def create_subprocess_exec_log(
     *args: str,
     stdout: int = None,
     stderr: int = None,
-    rel: _Tuple[str, str] = None,
+    rel: tuple[str, str] = None,
     **kwargs,
 ) -> _Process:
     """

@@ -8,8 +8,6 @@ from collections import UserDict
 from typing import Any as _Any
 from typing import Iterator as _Iterator
 from typing import MutableMapping as _MutableMapping
-from typing import Tuple as _Tuple
-from typing import Type as _Type
 from typing import TypeVar as _TypeVar
 
 # internal
@@ -40,7 +38,7 @@ class Schema(_abc.ABC):
 
     @classmethod
     def from_path(
-        cls: _Type[T], path: _Pathlike, includes_key: str = None, **kwargs
+        cls: type[T], path: _Pathlike, includes_key: str = None, **kwargs
     ) -> T:
         """Load a schema from a data file on disk."""
         return cls(
@@ -62,7 +60,7 @@ class SchemaMap(
 
     @classmethod
     @_abc.abstractmethod
-    def kind(cls: _Type[V]) -> _Type[Schema]:
+    def kind(cls: type[V]) -> type[Schema]:
         """Implement this to determine the concrete schema type."""
 
     def __init__(self) -> None:
@@ -71,7 +69,7 @@ class SchemaMap(
 
     def load_file(
         self, path: _Pathlike, includes_key: str = None, **kwargs
-    ) -> _Tuple[str, T]:
+    ) -> tuple[str, T]:
         """Load a schema file into the map."""
 
         path = _normalize(path)
@@ -84,7 +82,7 @@ class SchemaMap(
 
     def load_directory(
         self, path: _Pathlike, includes_key: str = None, **kwargs
-    ) -> _Iterator[_Tuple[str, Schema]]:
+    ) -> _Iterator[tuple[str, Schema]]:
         """Load a directory of schema files into the map."""
 
         path = _normalize(path)
@@ -99,7 +97,7 @@ class SchemaMap(
         package_subdir: str = "data",
         includes_key: str = None,
         **kwargs,
-    ) -> _Iterator[_Tuple[str, Schema]]:
+    ) -> _Iterator[tuple[str, Schema]]:
         """Load schemas from package data."""
 
         path = _resource(path, package=package, package_subdir=package_subdir)
@@ -113,7 +111,7 @@ class SchemaMap(
 
     @classmethod
     def from_package(
-        cls: _Type[V],
+        cls: type[V],
         package: str,
         includes_key: str = None,
         **kwargs,

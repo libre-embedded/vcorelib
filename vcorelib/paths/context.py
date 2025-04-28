@@ -9,7 +9,6 @@ from os import makedirs as _makedirs
 from pathlib import Path as _Path
 from tempfile import NamedTemporaryFile as _NamedTemporaryFile
 from typing import Iterator as _Iterator
-from typing import Union as _Union
 
 # internal
 from vcorelib.paths import Pathlike as _Pathlike
@@ -18,7 +17,7 @@ from vcorelib.paths import normalize as _normalize
 
 @contextmanager
 def in_dir(
-    path: _Pathlike, *parts: _Union[str, _Path], makedirs: bool = False
+    path: _Pathlike, *parts: str | _Path, makedirs: bool = False
 ) -> _Iterator[_Path]:
     """Change the current working directory as a context manager."""
 
@@ -61,7 +60,7 @@ def as_path(pathlike: PossiblePath, **kwargs) -> _Iterator[_Path]:
 def linked_to(
     link: _Pathlike,
     target: _Pathlike,
-    *parts: _Union[str, _Path],
+    *parts: str | _Path,
     target_is_directory: bool = False,
 ) -> _Iterator[_Path]:
     """Provide a symbolic link as a managed context."""

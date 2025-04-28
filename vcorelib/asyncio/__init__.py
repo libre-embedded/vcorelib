@@ -17,9 +17,7 @@ from typing import Callable as _Callable
 from typing import Coroutine as _Coroutine
 from typing import Iterable as _Iterable
 from typing import Iterator
-from typing import List as _List
 from typing import Optional as _Optional
-from typing import Set as _Set
 from typing import TypeVar as _TypeVar
 
 # internal
@@ -50,7 +48,7 @@ def log_task_exception(
 
 def log_exceptions(
     tasks: _Iterable[_asyncio.Task[T]], logger: _LoggerType = None
-) -> _List[_asyncio.Task[T]]:
+) -> list[_asyncio.Task[T]]:
     """Log task exception and return the list of tasks that aren't complete."""
 
     for task in tasks:
@@ -147,7 +145,7 @@ def event_setter(
     return setter
 
 
-def all_stop_signals() -> _Set[int]:
+def all_stop_signals() -> set[int]:
     """Get a set of all stop signals on this platform."""
 
     return {

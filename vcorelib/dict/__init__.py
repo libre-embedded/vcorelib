@@ -8,16 +8,14 @@ from enum import Enum as _Enum
 from enum import auto as _auto
 from logging import getLogger
 from typing import Any as _Any
-from typing import Dict as _Dict
 from typing import Iterator as _Iterator
-from typing import List as _List
 
 # internal
 from vcorelib.logging import LoggerType
 
 _LOG = getLogger(__name__)
-GenericDict = _Dict[_Any, _Any]
-GenericStrDict = _Dict[str, _Any]
+GenericDict = dict[_Any, _Any]
+GenericStrDict = dict[str, _Any]
 
 
 def consume(data: GenericDict, key: _Any, default: _Any = None) -> _Any:
@@ -81,7 +79,7 @@ class MergeStrategy(_Enum):
 def merge_recursive(
     dict_a: GenericDict,
     dict_b: GenericDict,
-    path: _List[str] = None,
+    path: list[str] = None,
     expect_overwrite: bool = False,
     logger: LoggerType = None,
     strategy: MergeStrategy = MergeStrategy.RECURSIVE,
@@ -140,7 +138,7 @@ def merge_recursive(
 def merge(
     dict_a: GenericDict,
     dict_b: GenericDict,
-    path: _List[str] = None,
+    path: list[str] = None,
     expect_overwrite: bool = False,
     logger: LoggerType = None,
     strategy: MergeStrategy = MergeStrategy.RECURSIVE,
@@ -162,7 +160,7 @@ def merge(
 
 
 def merge_dicts(
-    dicts: _List[GenericDict],
+    dicts: list[GenericDict],
     expect_overwrite: bool = False,
     logger: LoggerType = None,
     strategy: MergeStrategy = MergeStrategy.RECURSIVE,

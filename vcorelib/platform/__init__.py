@@ -5,8 +5,6 @@ A module implementing utilities for performing tasks on differing platforms.
 # built-in
 from platform import system as _system
 from typing import Iterable as _Iterable
-from typing import List as _List
-from typing import Tuple as _Tuple
 
 
 def is_windows() -> bool:
@@ -16,7 +14,7 @@ def is_windows() -> bool:
 
 def reconcile_platform(
     program: str, args: _Iterable[str]
-) -> _Tuple[str, _List[str]]:
+) -> tuple[str, list[str]]:
     """
     Handle arguments for Windows. You cannot run a program directly on Windows
     under any circumstance, so pass arguments through to the shell.

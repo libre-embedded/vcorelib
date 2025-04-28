@@ -3,16 +3,16 @@ A module for working with units.
 """
 
 # built-in
-import typing
+from typing import NamedTuple, Sequence
 
 
-class UnitSystem(typing.NamedTuple):
+class UnitSystem(NamedTuple):
     """
     A pairing of prefixes defining a unit, and the amount that indicates the
     multiplicative step-size between them.
     """
 
-    prefixes: typing.Sequence[str]
+    prefixes: Sequence[str]
     divisor: int
 
 
@@ -27,7 +27,7 @@ def unit_traverse(
     unit: UnitSystem = SI_UNITS,
     max_prefix: int = 3,
     iteration: int = 0,
-) -> typing.Tuple[int, int, str]:
+) -> tuple[int, int, str]:
     """
     Given an initial value, traverse a unit system to get the largest
     representative unit prefix. Also return a fractional component, in units

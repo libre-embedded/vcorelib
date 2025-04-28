@@ -4,9 +4,7 @@ A module containing abstract base-classes related to graphs.
 
 # built-in
 from collections import UserDict as _UserDict
-from typing import Dict as _Dict
 from typing import Iterator as _Iterator
-from typing import Set as _Set
 from typing import Type as _Type
 from typing import TypeVar as _TypeVar
 
@@ -90,11 +88,11 @@ class AbstractDiGraphNode(_Serializable):
                     yield graph[label]
                     break
 
-    def parallel(self) -> _Set[T]:
+    def parallel(self) -> set[T]:
         """Iterate over nodes that this instance shares parallel edges with."""
 
-        outgoing: _Set[T] = set(self.outgoing())
-        incoming: _Set[T] = set(self.incoming())
+        outgoing: set[T] = set(self.outgoing())
+        incoming: set[T] = set(self.incoming())
         return outgoing.intersection(incoming)
 
 
@@ -107,7 +105,7 @@ class AbstractDiGraph(
     def __init__(
         self,
         name: str,
-        initialdata: _Dict[str, T] = None,
+        initialdata: dict[str, T] = None,
         graph_attrs: _AttributeMap = None,
         node_attrs: _AttributeMap = None,
         edge_attrs: _AttributeMap = None,
@@ -121,7 +119,7 @@ class AbstractDiGraph(
         self.edge_attrs = edge_attrs
 
         # Source node -> a set of all destination edges.
-        self.edges: _Dict[str, _Set[_GraphEdge]] = {}
+        self.edges: dict[str, set[_GraphEdge]] = {}
 
     def handle_node(self, label: str, node: T = None) -> T:
         """

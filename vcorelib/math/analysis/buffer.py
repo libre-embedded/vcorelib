@@ -2,9 +2,6 @@
 A simple circular buffer for floating-point numbers.
 """
 
-# built-in
-from typing import List as _List
-
 DEFAULT_DEPTH = 10
 
 
@@ -17,7 +14,7 @@ class FloatBuffer:
         """Initialize this instance."""
 
         self._index: int = 0
-        self.data: _List[float] = []
+        self.data: list[float] = []
         self.depth: int = depth
         self.elements: int = 0
 

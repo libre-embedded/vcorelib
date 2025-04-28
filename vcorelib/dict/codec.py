@@ -7,12 +7,10 @@ exported as dictionaries.
 import abc as _abc
 from contextlib import contextmanager as _contextmanager
 from typing import Any as _Any
-from typing import Dict as _Dict
 from typing import Iterator as _Iterator
 from typing import Optional as _Optional
 from typing import Type as _Type
 from typing import TypeVar as _TypeVar
-from typing import Union as _Union
 
 # internal
 from vcorelib.io import ARBITER as _ARBITER
@@ -30,7 +28,7 @@ class JsonCodec(_abc.ABC, SchemaMixin):
     """A simple JSON codec interface."""
 
     @classmethod
-    def normalize(cls: _Type[T], data: _Union[_JsonObject, T]) -> T:
+    def normalize(cls: _Type[T], data: _JsonObject | T) -> T:
         """Ensure that some object is an instance of this class."""
 
         if not isinstance(data, cls):
@@ -112,7 +110,7 @@ class JsonCodec(_abc.ABC, SchemaMixin):
         cls: _Type[T],
         pathlike: _Pathlike,
         arbiter: _DataArbiter = _ARBITER,
-        encode_kwargs: _Dict[str, _Any] = None,
+        encode_kwargs: dict[str, _Any] = None,
         require_success: bool = False,
         **kwargs,
     ) -> _Iterator[T]:

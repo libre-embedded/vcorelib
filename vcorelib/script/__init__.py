@@ -8,7 +8,6 @@ import importlib.util
 from pathlib import Path as _Path
 from sys import path as _path
 from typing import Any as _Any
-from typing import Set as _Set
 
 # internal
 from vcorelib.paths import Pathlike as _Pathlike
@@ -44,7 +43,7 @@ class ScriptableMixin:
 
     def __init__(self) -> None:
         """Initialize this scriptable object."""
-        self._invoked: _Set[_Path] = set()
+        self._invoked: set[_Path] = set()
 
     def script(
         self, script: _Path, method: str, *args, once: bool = True, **kwargs

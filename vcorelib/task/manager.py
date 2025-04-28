@@ -9,11 +9,7 @@ from collections import defaultdict
 from typing import Any as _Any
 from typing import Callable as _Callable
 from typing import Coroutine as _Coroutine
-from typing import Dict as _Dict
 from typing import Iterable as _Iterable
-from typing import List as _List
-from typing import Set as _Set
-from typing import Tuple as _Tuple
 from typing import cast
 
 # internal
@@ -38,8 +34,8 @@ class TaskManager(ScriptableMixin):
         """Initialize this task manager."""
 
         super().__init__()
-        self.tasks: _Dict[str, Task] = {}
-        self.dependencies: _Dict[str, _Set[str]] = defaultdict(set)
+        self.tasks: dict[str, Task] = {}
+        self.dependencies: dict[str, set[str]] = defaultdict(set)
         self.finalized: bool = False
         if resolver is None:
             resolver = TargetResolver()
@@ -125,7 +121,7 @@ class TaskManager(ScriptableMixin):
 
     def evaluate(
         self, tasks: _Iterable[str], **kwargs
-    ) -> _Tuple[_List[_Tuple[Task, TargetMatch]], _Set[str]]:
+    ) -> tuple[list[tuple[Task, TargetMatch]], set[str]]:
         """
         Iterate over task strings and provide a list of tasks that can be
         executed (plus relevant data from matching the target) as well as
@@ -135,8 +131,8 @@ class TaskManager(ScriptableMixin):
         # Ensure task dependencies are added.
         self.finalize(**kwargs)
 
-        unresolved: _Set[str] = set()
-        task_objs: _List[_Tuple[Task, TargetMatch]] = []
+        unresolved: set[str] = set()
+        task_objs: list[tuple[Task, TargetMatch]] = []
         for resolved in self.resolver.evaluate_all(tasks):
             if isinstance(resolved, str):
                 unresolved.add(resolved)
@@ -147,7 +143,7 @@ class TaskManager(ScriptableMixin):
 
     def prepare_execute(
         self, tasks: _Iterable[str], **kwargs
-    ) -> _Tuple[_Set[str], BasicCoroutine]:
+    ) -> tuple[set[str], BasicCoroutine]:
         """
         Gather tasks that can and can't be executed to prepare a function that
         can execute tasks and also return the task strings that wouldn't be
@@ -169,7 +165,7 @@ class TaskManager(ScriptableMixin):
 
         return unresolved, executor
 
-    def execute(self, tasks: _Iterable[str], **kwargs) -> _Set[str]:
+    def execute(self, tasks: _Iterable[str], **kwargs) -> set[str]:
         """
         Execute some set of provided tasks. Return the tasks that don't get
         resolved.

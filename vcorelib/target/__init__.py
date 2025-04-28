@@ -6,10 +6,8 @@ from __future__ import annotations
 
 # built-in
 import re
-from typing import List as _List
 from typing import NamedTuple
 from typing import Optional as _Optional
-from typing import Tuple as _Tuple
 
 # internal
 from vcorelib.target.evaluation import (
@@ -75,7 +73,7 @@ class Target(TargetInterface[DynamicTargetEvaluator]):
 
         pattern = "^"
         keys = []
-        markers: _List[_Tuple[int, int]] = []
+        markers: list[tuple[int, int]] = []
         live = data
         abs_idx = 0
         for _ in range(open_len):

@@ -5,21 +5,19 @@ A module for working with application-specific argument parsers.
 # built-in
 from argparse import ArgumentParser, Namespace
 from typing import Callable as _Callable
-from typing import Dict as _Dict
 from typing import Sequence as _Sequence
-from typing import Tuple as _Tuple
 
 CommandFunction = _Callable[[Namespace], int]
 CommandRegister = _Callable[[ArgumentParser], CommandFunction]
 
-CommandLoader = _Callable[[], _Sequence[_Tuple[str, str, CommandRegister]]]
+CommandLoader = _Callable[[], _Sequence[tuple[str, str, CommandRegister]]]
 
-CMDS: _Dict[str, CommandFunction] = {}
+CMDS: dict[str, CommandFunction] = {}
 
 
 def app_args(
-    command_loader: CommandLoader, commands: _Dict[str, CommandFunction] = None
-) -> _Tuple[_Callable[[ArgumentParser], None], CommandFunction]:
+    command_loader: CommandLoader, commands: dict[str, CommandFunction] = None
+) -> tuple[_Callable[[ArgumentParser], None], CommandFunction]:
     """
     Create a function that can be used to add sub-command processing to an
     argument parser.
