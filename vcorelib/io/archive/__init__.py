@@ -53,7 +53,11 @@ def safe_extract(
 
 
 def extractall(
-    src: _Pathlike, dst: _Pathlike = None, maxsplit: int = 1, **extract_kwargs
+    src: _Pathlike,
+    dst: _Pathlike = None,
+    maxsplit: int = 1,
+    tar_filter: str = "tar",
+    **extract_kwargs,
 ) -> _Tuple[bool, int]:
     """
     Attempt to extract an arbitrary archive to a destination. Return whether or
@@ -75,7 +79,7 @@ def extractall(
         # Extract the tar archive.
         if ext is FileExtension.TAR:
             with tarfile.open(src) as tar:
-                safe_extract(tar, dst, **extract_kwargs)
+                safe_extract(tar, dst, filter=tar_filter, **extract_kwargs)
             success = True
 
         # Extract the ZIP archive.
