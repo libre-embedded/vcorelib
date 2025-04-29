@@ -15,7 +15,7 @@ from pytest import mark
 from tests.resources import resource
 
 # module under test
-from vcorelib.io import ARBITER, FileExtension
+from vcorelib.io import ARBITER, FileExtension, encode_if_different
 from vcorelib.io.mapping import DataMapping
 from vcorelib.paths.context import tempfile
 
@@ -26,6 +26,19 @@ def verify_can_encode(data: Any, ext: FileExtension) -> None:
     for ext_str in set([str(ext), "json", "yaml", "ini", "toml"]):
         with tempfile(suffix=f".{ext_str}") as tfile:
             ARBITER.encode(tfile, data)
+
+
+def test_encode_if_different_basic():
+    """Test the 'encode_if_different' method."""
+
+    with TemporaryDirectory() as tmpdir:
+        base = Path(tmpdir)
+        out = base.joinpath("out.json")
+
+        data = {"a": 1, "b": 2, "c": 3}
+
+        assert encode_if_different(out, data)
+        assert encode_if_different(out, data)
 
 
 @mark.asyncio

@@ -2,6 +2,7 @@
 max-args=10
 max-positional-arguments=10
 max-attributes=8
+max-public-methods=21
 
 [SIMILARITIES]
 ignore-imports=yes

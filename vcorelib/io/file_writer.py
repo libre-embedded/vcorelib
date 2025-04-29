@@ -15,7 +15,7 @@ import markdown
 
 # internal
 from vcorelib import DEFAULT_ENCODING
-from vcorelib.paths.context import tempfile
+from vcorelib.paths.context import tempfile, text_stream_if_different
 
 
 class CommentStyle(Enum):
@@ -106,6 +106,18 @@ class IndentedFileWriter:
         """Create an instance from a path as a managed context."""
 
         with path.open("w", encoding=DEFAULT_ENCODING) as stream:
+            yield IndentedFileWriter(
+                stream, space=space, per_indent=per_indent, **kwargs
+            )
+
+    @staticmethod
+    @contextmanager
+    def from_path_if_different(
+        path: Path, space: str = " ", per_indent: int = 1, **kwargs
+    ) -> Iterator["IndentedFileWriter"]:
+        """Create an instance from a path as a managed context."""
+
+        with text_stream_if_different(path) as stream:
             yield IndentedFileWriter(
                 stream, space=space, per_indent=per_indent, **kwargs
             )

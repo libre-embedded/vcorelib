@@ -7,6 +7,8 @@ from contextlib import ExitStack
 from io import StringIO
 from json import dumps
 from os import linesep
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 # module under test
 from vcorelib.io.file_writer import CommentStyle, IndentedFileWriter
@@ -15,6 +17,22 @@ from vcorelib.io.file_writer import CommentStyle, IndentedFileWriter
 def lines(*parts: str) -> str:
     """Get a sequence of strings as lines."""
     return linesep.join(parts) + linesep
+
+
+def test_file_writer_different():
+    """Test write-if-different option for file writer."""
+
+    with TemporaryDirectory() as tmpdir:
+        out = Path(tmpdir, "out.txt")
+
+        with IndentedFileWriter.from_path_if_different(out) as writer:
+            writer.write("test123")
+
+        with IndentedFileWriter.from_path_if_different(out) as writer:
+            writer.write("test123")
+
+        with IndentedFileWriter.from_path_if_different(out) as writer:
+            writer.write("test1234")
 
 
 def test_file_writer_markdown():
