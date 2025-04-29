@@ -4,13 +4,16 @@ A module for context managers related to file-system paths.
 
 # built-in
 from contextlib import ExitStack, contextmanager, suppress
+from io import StringIO as _StringIO
 from os import chdir as _chdir
 from os import makedirs as _makedirs
 from pathlib import Path as _Path
 from tempfile import NamedTemporaryFile as _NamedTemporaryFile
 from typing import Iterator as _Iterator
+from typing import TextIO as _TextIO
 
 # internal
+from vcorelib import DEFAULT_ENCODING as _DEFAULT_ENCODING
 from vcorelib.paths import Pathlike as _Pathlike
 from vcorelib.paths import normalize as _normalize
 
@@ -92,3 +95,40 @@ def tempfile(*args, **kwargs) -> _Iterator[_Path]:
             # Respect the 'delete' argument.
             if kwargs.get("delete", True):
                 path.unlink()
+
+
+def write_text_if_different(path: _Path, data: str) -> bool:
+    """
+    Writes the contents of a string stream if it differs from output path
+    data.
+    """
+
+    do_write = False
+
+    if path.is_file():
+        with path.open("r", encoding=_DEFAULT_ENCODING) as path_fd:
+            do_write = data != path_fd.read()
+    else:
+        do_write = True
+
+    if do_write:
+        with path.open("w", encoding=_DEFAULT_ENCODING) as path_fd:
+            path_fd.write(data)
+
+    return do_write
+
+
+@contextmanager
+def text_stream_if_different(path: _Path) -> _Iterator[_TextIO]:
+    """
+    Writes the contents of a string stream if it differs from output path
+    data.
+    """
+
+    with _StringIO() as stream:
+        try:
+            yield stream
+        finally:
+            content = stream.getvalue()
+
+    write_text_if_different(path, content)
