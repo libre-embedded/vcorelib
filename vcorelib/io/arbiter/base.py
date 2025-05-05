@@ -174,7 +174,12 @@ class DataArbiterBase:
                     # Load the included file.
                     result = result.merge(
                         await self.decode_async(
-                            find_file(include, relative_to=path, strict=True),
+                            find_file(
+                                include,
+                                relative_to=path,
+                                include_cwd=True,
+                                strict=True,
+                            ),
                             logger,
                             require_success=require_success,
                             includes_key=includes_key,
@@ -194,7 +199,12 @@ class DataArbiterBase:
                     # Load the included file.
                     result = result.merge(
                         await self.decode_async(
-                            find_file(include, relative_to=path, strict=True),
+                            find_file(
+                                include,
+                                relative_to=path,
+                                include_cwd=True,
+                                strict=True,
+                            ),
                             logger,
                             require_success=require_success,
                             includes_key=includes_key,
@@ -260,7 +270,12 @@ class DataArbiterBase:
                     # Load the included file.
                     result = result.merge(
                         self.decode(
-                            find_file(include, relative_to=path, strict=True),
+                            find_file(
+                                include,
+                                relative_to=path,
+                                include_cwd=True,
+                                strict=True,
+                            ),
                             logger,
                             require_success=require_success,
                             includes_key=includes_key,
@@ -278,7 +293,12 @@ class DataArbiterBase:
                     # Load the included file.
                     result = result.merge(
                         self.decode(
-                            find_file(include, relative_to=path, strict=True),
+                            find_file(
+                                include,
+                                relative_to=path,
+                                include_cwd=True,
+                                strict=True,
+                            ),
                             logger,
                             require_success=require_success,
                             includes_key=includes_key,
