@@ -25,8 +25,10 @@ def test_file_writer_different():
     with TemporaryDirectory() as tmpdir:
         out = Path(tmpdir, "out.txt")
 
-        with IndentedFileWriter.from_path_if_different(out) as writer:
-            writer.write("test123")
+        with IndentedFileWriter.from_path_if_different(
+            out, preprocessor=lambda _: "test123"
+        ) as writer:
+            writer.write("")
 
         with IndentedFileWriter.from_path_if_different(out) as writer:
             writer.write("test123")

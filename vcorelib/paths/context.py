@@ -9,6 +9,7 @@ from os import chdir as _chdir
 from os import makedirs as _makedirs
 from pathlib import Path as _Path
 from tempfile import NamedTemporaryFile as _NamedTemporaryFile
+from typing import Callable as _Callable
 from typing import Iterator as _Iterator
 from typing import TextIO as _TextIO
 
@@ -118,8 +119,13 @@ def write_text_if_different(path: _Path, data: str) -> bool:
     return do_write
 
 
+TextPreprocessor = _Callable[[str], str]
+
+
 @contextmanager
-def text_stream_if_different(path: _Path) -> _Iterator[_TextIO]:
+def text_stream_if_different(
+    path: _Path, preprocessor: TextPreprocessor = None
+) -> _Iterator[_TextIO]:
     """
     Writes the contents of a string stream if it differs from output path
     data.
@@ -130,5 +136,8 @@ def text_stream_if_different(path: _Path) -> _Iterator[_TextIO]:
             yield stream
         finally:
             content = stream.getvalue()
+
+    if preprocessor:
+        content = preprocessor(content)
 
     write_text_if_different(path, content)
