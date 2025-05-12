@@ -2,14 +2,13 @@
 A module for working with asyncio.
 """
 
-from __future__ import annotations
-
 # built-in
 import asyncio as _asyncio
-from contextlib import ExitStack, contextmanager
+from contextlib import contextmanager
 from contextlib import suppress as _suppress
 from logging import getLogger as _getLogger
 import signal as _signal
+import time
 from types import FrameType as _FrameType
 from typing import Any as _Any
 from typing import Awaitable as _Awaitable
@@ -163,11 +162,13 @@ def run_handle_stop(
     eloop: _asyncio.AbstractEventLoop = None,
     signals: _Iterable[int] = None,
     enable_uvloop: bool = True,
-) -> T:
+) -> _Optional[T]:
     """
     Publish the stop signal on keyboard interrupt and wait for the task to
     complete.
     """
+
+    result = None
 
     with try_uvloop_runner(eloop=eloop, enable=enable_uvloop) as loop:
         to_run = loop.create_task(task)
@@ -178,41 +179,32 @@ def run_handle_stop(
             for signal in signals:
                 _signal.signal(signal, setter)
 
-        while True:
-            try:
-                return loop.run_until_complete(to_run)
-            except KeyboardInterrupt:
-                print("Keyboard interrupt.")
-                stop_sig.set()
+        while not to_run.done() and not loop.is_closed():
+            with _suppress(KeyboardInterrupt):
+                if not loop.is_running():
+                    result = loop.run_until_complete(to_run)
+                else:
+                    time.sleep(0.1)
+
+        log_task_exception(to_run)
+
+    return result
 
 
 @contextmanager
 def try_uvloop_runner(
-    debug: bool = None,
     eloop: _asyncio.AbstractEventLoop = None,
     enable: bool = True,
 ) -> Iterator[_asyncio.AbstractEventLoop]:
     """Try to set up an asyncio runner using uvloop."""
 
-    # pylint: disable=import-outside-toplevel
+    if enable and eloop is None:
+        with _suppress(ImportError):
+            # pylint: disable=import-outside-toplevel
+            import uvloop
 
-    with ExitStack() as stack:
-        if enable and eloop is None:
-            with _suppress(ImportError):
-                import uvloop
+            # pylint: enable=import-outside-toplevel
 
-                # Try-catch and type ignore can be removed if 3.10 gets
-                # dropped.
-                try:
-                    # type: ignore[attr-defined,unused-ignore]
-                    eloop = stack.enter_context(
-                        getattr(_asyncio, "Runner")(
-                            debug=debug, loop_factory=uvloop.new_event_loop
-                        )
-                    ).get_loop()
-                except AttributeError:  # pragma: nocover
-                    uvloop.install()
+            eloop = uvloop.new_event_loop()
 
-        yield normalize_eloop(eloop)
-
-    # pylint: enable=import-outside-toplevel
+    yield normalize_eloop(eloop)
