@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from contextlib import suppress as _suppress
 from logging import getLogger as _getLogger
 import signal as _signal
+import time as _time
 from types import FrameType as _FrameType
 from typing import Any as _Any
 from typing import Awaitable as _Awaitable
@@ -180,10 +181,16 @@ def run_handle_stop(
 
         while not to_run.done() and not loop.is_closed():
             try:
-                result = loop.run_until_complete(to_run)
+                if not loop.is_running():
+                    loop.run_until_complete(to_run)
+                else:  # pragma: nocover
+                    _time.sleep(0.1)
             except KeyboardInterrupt:
-                print("Keyboard interrupt.")
-                loop.call_soon_threadsafe(stop_sig.set)
+                with _suppress(KeyboardInterrupt):
+                    loop.call_soon_threadsafe(stop_sig.set)
+
+        if to_run.done():
+            result = to_run.result()
 
     return result
 
