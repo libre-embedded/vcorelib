@@ -6,7 +6,7 @@ from __future__ import annotations
 
 # built-in
 import asyncio as _asyncio
-from contextlib import ExitStack, contextmanager
+from contextlib import contextmanager
 from contextlib import suppress as _suppress
 from logging import getLogger as _getLogger
 import signal as _signal
@@ -109,8 +109,10 @@ def run_handle_interrupt(
     Return the result of the awaitable or None if execution was interrupted.
     """
 
-    with try_uvloop_runner(eloop=eloop, enable=enable_uvloop) as loop:
-        result = None
+    result = None
+
+    with try_uvloop_runner(eloop=eloop, enable=enable_uvloop) as runner:
+        loop = runner.get_loop()
         try:
             result = loop.run_until_complete(to_run)
         except KeyboardInterrupt:
@@ -163,27 +165,26 @@ def run_handle_stop(
     eloop: _asyncio.AbstractEventLoop = None,
     signals: _Iterable[int] = None,
     enable_uvloop: bool = True,
-) -> T:
+) -> _Optional[T]:
     """
     Publish the stop signal on keyboard interrupt and wait for the task to
     complete.
     """
 
-    with try_uvloop_runner(eloop=eloop, enable=enable_uvloop) as loop:
-        to_run = loop.create_task(task)
+    result = None
 
+    with try_uvloop_runner(eloop=eloop, enable=enable_uvloop) as runner:
         # Register signal handlers if signals were provided.
         if signals is not None:
-            setter = event_setter(stop_sig, eloop=loop)
+            setter = event_setter(stop_sig, eloop=runner.get_loop())
             for signal in signals:
                 _signal.signal(signal, setter)
 
-        while True:
-            try:
-                return loop.run_until_complete(to_run)
-            except KeyboardInterrupt:
-                print("Keyboard interrupt.")
-                stop_sig.set()
+        with _suppress(KeyboardInterrupt):
+            result = runner.run(task)
+        stop_sig.set()
+
+    return result
 
 
 @contextmanager
@@ -191,28 +192,26 @@ def try_uvloop_runner(
     debug: bool = None,
     eloop: _asyncio.AbstractEventLoop = None,
     enable: bool = True,
-) -> Iterator[_asyncio.AbstractEventLoop]:
+) -> Iterator[_asyncio.Runner]:
     """Try to set up an asyncio runner using uvloop."""
 
-    # pylint: disable=import-outside-toplevel
+    loop_factory = None
 
-    with ExitStack() as stack:
-        if enable and eloop is None:
-            with _suppress(ImportError):
-                import uvloop
+    if eloop is not None:
 
-                # Try-catch and type ignore can be removed if 3.10 gets
-                # dropped.
-                try:
-                    # type: ignore[attr-defined,unused-ignore]
-                    eloop = stack.enter_context(
-                        getattr(_asyncio, "Runner")(
-                            debug=debug, loop_factory=uvloop.new_event_loop
-                        )
-                    ).get_loop()
-                except AttributeError:  # pragma: nocover
-                    uvloop.install()
+        def factory() -> _asyncio.AbstractEventLoop:
+            """Return the provided event loop."""
+            return eloop
 
-        yield normalize_eloop(eloop)
+        loop_factory = factory
 
-    # pylint: enable=import-outside-toplevel
+    if enable and loop_factory is None:
+        with _suppress(ImportError):
+            # pylint: disable=import-outside-toplevel
+            import uvloop
+
+            # pylint: enable=import-outside-toplevel
+            loop_factory = uvloop.new_event_loop
+
+    with _asyncio.Runner(debug=debug, loop_factory=loop_factory) as runner:
+        yield runner
