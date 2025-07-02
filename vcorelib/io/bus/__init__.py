@@ -8,6 +8,7 @@ from typing import Any, Awaitable, Callable
 
 # internal
 from vcorelib.dict import GenericStrDict
+from vcorelib.logging import LoggerMixin
 
 # async def handler(payload: GenericStrDict, outbox: GenericStrDict) -> None:
 #     """Handle a bus message."""
@@ -20,12 +21,13 @@ BusMessageResponse = dict[str, GenericStrDict]
 BusRoMessageHandler = Callable[[GenericStrDict], Awaitable[None]]
 
 
-class AsyncMessageBus:
+class AsyncMessageBus(LoggerMixin):
     """A class implementing a runtime message bus interface."""
 
     def __init__(self) -> None:
         """Initialize this instance."""
 
+        super().__init__()
         self.handlers: dict[str, dict[str, BusMessageHandler]] = {}
         self.ro_handlers: dict[str, list[BusRoMessageHandler]] = {}
 
@@ -50,10 +52,15 @@ class AsyncMessageBus:
         """
 
         count = 0
-
         if key in self.ro_handlers:
             count = len(self.ro_handlers[key])
+
+        if count:
             await asyncio.gather(*(x(payload) for x in self.ro_handlers[key]))
+        else:
+            self.logger.warning(
+                "No recipient for read-only bus message '%s' %s.", key, payload
+            )
 
         return count
 
@@ -73,6 +80,10 @@ class AsyncMessageBus:
         ]
         if send_ro:
             tasks.append(self.send_ro(key, payload))
+        elif not tasks:
+            self.logger.warning(
+                "No recipient for bus message '%s' %s.", key, payload
+            )
 
         await asyncio.gather(*tasks)
 
