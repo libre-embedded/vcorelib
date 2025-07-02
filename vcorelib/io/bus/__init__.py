@@ -4,6 +4,7 @@ A module implementing a message bus interface.
 
 # built-in
 import asyncio
+from logging import INFO
 from typing import Any, Awaitable, Callable
 
 # internal
@@ -30,6 +31,20 @@ class AsyncMessageBus(LoggerMixin):
         super().__init__()
         self.handlers: dict[str, dict[str, BusMessageHandler]] = {}
         self.ro_handlers: dict[str, list[BusRoMessageHandler]] = {}
+
+        # Standard interfaces.
+
+        async def log_handler(payload: GenericStrDict) -> None:
+            """Handle a bus message."""
+
+            self.logger.log(
+                payload.get("level", INFO),
+                payload.get("msg", ""),
+                *payload.get("args", []),
+                **payload.get("kwargs", {}),
+            )
+
+        self.register_ro("log", log_handler)
 
     def register_ro(self, key: str, handler: BusRoMessageHandler) -> None:
         """Register a bus message handler."""

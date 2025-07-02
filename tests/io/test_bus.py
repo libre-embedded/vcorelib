@@ -15,6 +15,13 @@ from vcorelib.io.bus import BUS
 async def test_message_bus_basic():
     """Test basic interactions with a message bus."""
 
+    assert (
+        await BUS.send_ro(
+            "log", {"msg": "%s, %s!", "args": ["hello", "world"]}
+        )
+        == 1
+    )
+
     async def ro_handler1(payload: GenericStrDict) -> None:
         """Handle a bus message."""
         del payload
