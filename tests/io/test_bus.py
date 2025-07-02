@@ -23,6 +23,9 @@ async def test_message_bus_basic():
         """Handle a bus message."""
         del payload
 
+    assert (await BUS.send("test", {"d": 4}, send_ro=False)) == {}
+    assert await BUS.send_ro("test", {}) == 0
+
     BUS.register_ro("test", ro_handler1)
     BUS.register_ro("test", ro_handler2)
     assert await BUS.send_ro("test", {}) == 2
@@ -30,6 +33,8 @@ async def test_message_bus_basic():
     async def handler(payload: GenericStrDict, outbox: GenericStrDict) -> None:
         """Handle a bus message."""
         outbox.update(payload)
+
+    assert (await BUS.send("test", {"d": 4})) == {}
 
     BUS.register("test", "a", handler)
     BUS.register("test", "b", handler)
