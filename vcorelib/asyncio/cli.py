@@ -5,6 +5,7 @@ A module implementing utilities to work with asyncio processes.
 # built-in
 from asyncio import CancelledError as _CancelledError
 from asyncio import create_subprocess_shell
+from asyncio.subprocess import PIPE as _PIPE
 from asyncio.subprocess import Process as _Process
 import signal as _signal
 from typing import NamedTuple, Optional
@@ -87,6 +88,7 @@ async def run_command(
                 *args,
                 stdout=stdout,
                 stderr=stderr,
+                stdin=_PIPE if stdin else None,
                 **kwargs,
             ),
             rel[0],
@@ -135,6 +137,7 @@ async def run_shell(
                 " ".join(args),
                 stdout=stdout,
                 stderr=stderr,
+                stdin=_PIPE if stdin else None,
                 **kwargs,
             ),
             rel[0],
