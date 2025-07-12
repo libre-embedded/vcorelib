@@ -7,6 +7,7 @@ from asyncio import CancelledError as _CancelledError
 from asyncio import create_subprocess_shell
 from asyncio.subprocess import PIPE as _PIPE
 from asyncio.subprocess import Process as _Process
+from logging import INFO as _INFO
 import signal as _signal
 from typing import NamedTuple, Optional
 
@@ -32,6 +33,7 @@ async def handle_process_cancel(
     logger: LoggerType,
     stdin: bytes = None,
     signal: int = None,
+    level: int = _INFO,
 ) -> ProcessResult:
     """
     Communicate with a process and send a signal to it if this task gets
@@ -47,7 +49,9 @@ async def handle_process_cancel(
     assert signal is not None
 
     try:
-        with log_time(logger, "Process '%s' (%d)", name, proc.pid):
+        with log_time(
+            logger, "Process '%s' (%d)", name, proc.pid, level=level
+        ):
             stdout_data, stderr_data = await proc.communicate(input=stdin)
 
     except _CancelledError:
@@ -61,8 +65,12 @@ async def handle_process_cancel(
 
     finally:
         if proc.returncode is not None:
-            logger.info(
-                "Process '%s' (%d) exited %d.", name, proc.pid, proc.returncode
+            logger.log(
+                level,
+                "Process '%s' (%d) exited %d.",
+                name,
+                proc.pid,
+                proc.returncode,
             )
 
     return ProcessResult(proc, stdout_data, stderr_data)
@@ -75,13 +83,14 @@ async def run_command(
     stdout: int = None,
     stderr: int = None,
     signal: int = None,
+    level: int = _INFO,
     **kwargs,
 ) -> ProcessResult:
     """Run a subprocess and return the completed process."""
 
     rel = log_process_info(*args)
 
-    with log_time(logger, "Command '%s'", rel[0]):
+    with log_time(logger, "Command '%s'", rel[0], level=level):
         proc = await handle_process_cancel(
             await create_subprocess_exec_log(
                 logger,
@@ -89,12 +98,14 @@ async def run_command(
                 stdout=stdout,
                 stderr=stderr,
                 stdin=_PIPE if stdin else None,
+                level=level,
                 **kwargs,
             ),
             rel[0],
             logger,
             stdin=stdin,
             signal=signal,
+            level=level,
         )
 
     return proc
@@ -105,13 +116,14 @@ async def create_subprocess_shell_log(
     command: str,
     stdout: int = None,
     stderr: int = None,
+    level: int = _INFO,
     **kwargs,
 ) -> _Process:
     """
     Create a shell process and log information about the created process.
     """
 
-    logger.info("shell: '%s'", command)
+    logger.log(level, "shell: '%s'", command)
     return await create_subprocess_shell(
         command, stdout=stdout, stderr=stderr, **kwargs
     )
@@ -124,13 +136,14 @@ async def run_shell(
     stdout: int = None,
     stderr: int = None,
     signal: int = None,
+    level: int = _INFO,
     **kwargs,
 ) -> ProcessResult:
     """Run a shell command and return the completed process."""
 
     rel = log_process_info(*args)
 
-    with log_time(logger, "Shell '%s'", rel[0]):
+    with log_time(logger, "Shell '%s'", rel[0], level=level):
         proc = await handle_process_cancel(
             await create_subprocess_shell_log(
                 logger,
@@ -138,12 +151,14 @@ async def run_shell(
                 stdout=stdout,
                 stderr=stderr,
                 stdin=_PIPE if stdin else None,
+                level=level,
                 **kwargs,
             ),
             rel[0],
             logger,
             stdin=stdin,
             signal=signal,
+            level=level,
         )
 
     return proc

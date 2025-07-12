@@ -5,6 +5,7 @@ A module implementing utilities for working with asyncio subprocesses.
 # built-in
 from asyncio import create_subprocess_exec
 from asyncio.subprocess import Process as _Process
+from logging import INFO as _INFO
 
 # internal
 from vcorelib.logging import LoggerType
@@ -34,6 +35,7 @@ async def create_subprocess_exec_log(
     stdout: int = None,
     stderr: int = None,
     rel: tuple[str, str] = None,
+    level: int = _INFO,
     **kwargs,
 ) -> _Process:
     """
@@ -45,7 +47,7 @@ async def create_subprocess_exec_log(
         rel = log_process_info(program, *args)
 
     # Use relative paths when logging to reduce output.
-    logger.info("exec '%s': %s", rel[0], rel[1])
+    logger.log(level, "exec '%s': %s", rel[0], rel[1])
 
     program, list_args = reconcile_platform(program, args)
     proc = await create_subprocess_exec(
