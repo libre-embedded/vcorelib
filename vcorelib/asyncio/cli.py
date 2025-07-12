@@ -7,6 +7,7 @@ from asyncio import CancelledError as _CancelledError
 from asyncio import create_subprocess_shell
 from asyncio.subprocess import PIPE as _PIPE
 from asyncio.subprocess import Process as _Process
+from contextlib import suppress
 from logging import INFO as _INFO
 import signal as _signal
 from typing import NamedTuple, Optional
@@ -55,11 +56,15 @@ async def handle_process_cancel(
             stdout_data, stderr_data = await proc.communicate(input=stdin)
 
     except _CancelledError:
-        # Send the process a signal and wait for it to terminate.
-        proc.send_signal(signal)
-        logger.warning(
-            "Sending signal %d to process '%s' (%d).", signal, name, proc.pid
-        )
+        with suppress(ProcessLookupError):
+            # Send the process a signal and wait for it to terminate.
+            proc.send_signal(signal)
+            logger.warning(
+                "Sending signal %d to process '%s' (%d).",
+                signal,
+                name,
+                proc.pid,
+            )
         await proc.wait()
         raise
 
