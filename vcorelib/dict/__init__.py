@@ -104,7 +104,7 @@ def merge_recursive(
         if not isinstance(right_val, type(dict_a[key])):
             try:
                 right_val = type(dict_a[key])(right_val)
-            except ValueError:
+            except (ValueError, TypeError):
                 pass
 
         # same leaf value
