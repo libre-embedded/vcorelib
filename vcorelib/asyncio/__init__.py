@@ -177,7 +177,8 @@ def run_handle_stop(
         if signals is not None:
             setter = event_setter(stop_sig, eloop=loop)
             for signal in signals:
-                _signal.signal(signal, setter)
+                with _suppress(ValueError):
+                    _signal.signal(signal, setter)
 
         while not to_run.done() and not loop.is_closed():
             try:
