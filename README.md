@@ -2,11 +2,11 @@
     =====================================
     generator=datazen
     version=3.2.3
-    hash=7778403a0f047c1b7edbd6cb9ce68e19
+    hash=9956d28ac5bc6ebcb87bd7ef7b2e727e
     =====================================
 -->
 
-# vcorelib ([3.6.7](https://pypi.org/project/vcorelib/))
+# vcorelib ([3.6.8](https://pypi.org/project/vcorelib/))
 
 [![python](https://img.shields.io/pypi/pyversions/vcorelib.svg)](https://pypi.org/project/vcorelib/)
 ![Build Status](https://github.com/libre-embedded/vcorelib/workflows/Python%20Package/badge.svg)
@@ -24,8 +24,8 @@ Consider [sponsoring development](https://github.com/sponsors/libre-embedded).
 
 This package is tested with the following Python minor versions:
 
-* [`python3.12`](https://docs.python.org/3.12/)
 * [`python3.13`](https://docs.python.org/3.13/)
+* [`python3.14`](https://docs.python.org/3.14/)
 
 ## Platform Support
 
