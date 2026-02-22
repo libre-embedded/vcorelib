@@ -98,6 +98,7 @@ def handle_interrupt_subprocess_test(idx: int) -> bool:
     ):
         with subprocess.Popen(
             [sys.executable, "-m", "coverage", "run", "-a", str(script)],
+            start_new_session=True,
         ) as proc:
             time.sleep(0.2 * idx)
 
