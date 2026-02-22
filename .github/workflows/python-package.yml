@@ -56,7 +56,7 @@ jobs:
 
       - run: mk python-test
         env:
-          PY_TEST_EXTRA_ARGS: --cov-report=xml
+          PY_TEST_EXTRA_ARGS: --cov-report=xml --full-trace
 
       - uses: codecov/codecov-action@v5
         with:
