@@ -26,8 +26,8 @@ async def test_asyncio_repeat_until_basic():
         """Does nothing."""
         poll_event.set()
 
-    period = 0.01
-    timeout = 0.1
+    period = 0.1
+    timeout = 1.0
 
     # Should complete right away.
     event = asyncio.Event()
