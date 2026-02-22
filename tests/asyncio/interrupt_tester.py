@@ -13,7 +13,11 @@ import tempfile
 from textwrap import dedent
 
 # module under test
-from vcorelib.asyncio import all_stop_signals, run_handle_interrupt
+from vcorelib.asyncio import (
+    all_stop_signals,
+    log_exceptions,
+    run_handle_interrupt,
+)
 from vcorelib.task import TaskFailed
 from vcorelib.task.subprocess.run import SubprocessExecStreamed
 
@@ -64,14 +68,16 @@ def task_runner() -> None:
         # main thread.
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
+        task_inst = loop.create_task(task.dispatch())
         try:
-            run_handle_interrupt(task.dispatch(), loop)
+            run_handle_interrupt(task_inst, loop)
 
         # The task succeeds only if the command exited zero.
         except TaskFailed:
             sys.exit(1)
 
     finally:
+        log_exceptions([task_inst])
         remove(name)
 
     sys.exit(0)
