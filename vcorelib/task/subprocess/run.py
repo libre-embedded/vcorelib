@@ -188,6 +188,7 @@ class SubprocessExec(SubprocessLogMixin):
                 separator=separator,
                 stdout=_PIPE,
                 stderr=_PIPE,
+                **kwargs,
             ),
             self.name,
             self.log,
@@ -219,7 +220,7 @@ class SubprocessExecStreamed(SubprocessLogMixin):
 
         proc, stdout, stderr = await handle_process_cancel(
             await self.subprocess_exec(
-                program, *caller_args, args=args, separator=separator
+                program, *caller_args, args=args, separator=separator, **kwargs
             ),
             self.name,
             self.log,
@@ -259,6 +260,7 @@ class SubprocessShell(SubprocessLogMixin):
                 separator=separator,
                 stdout=_PIPE,
                 stderr=_PIPE,
+                **kwargs,
             ),
             self.name,
             self.log,
@@ -296,6 +298,7 @@ class SubprocessShellStreamed(SubprocessLogMixin):
                 args=args,
                 joiner=joiner,
                 separator=separator,
+                **kwargs,
             ),
             self.name,
             self.log,
