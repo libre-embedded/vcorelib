@@ -43,7 +43,9 @@ async def repeat_until(
     async def poller_canceller() -> None:
         """Cancel the poller task when the event is set."""
 
-        await event.wait()
+        with suppress(asyncio.CancelledError):
+            await event.wait()
+
         if not poll_task.done():
             poll_task.cancel()
             await poll_task
@@ -58,7 +60,9 @@ async def repeat_until(
         result = event.is_set()
 
     # Clean up.
-    event.set()
-    await poller_task
+    if not poller_task.done():
+        poller_task.cancel()
+        with suppress(asyncio.CancelledError):
+            await poller_task
 
     return result
