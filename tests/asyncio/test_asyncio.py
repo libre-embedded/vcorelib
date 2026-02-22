@@ -36,10 +36,12 @@ def iterative_tester(test: TestIteration, iterations: int) -> bool:
     """Run a test until it passes."""
 
     success = False
+
     for i in range(iterations):
-        success = test(i)
-        if success:
-            break
+        with suppress(KeyboardInterrupt):
+            success = test(i)
+            if success:
+                break
 
     return success
 
