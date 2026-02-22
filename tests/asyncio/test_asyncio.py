@@ -28,6 +28,7 @@ from vcorelib.asyncio import (
     run_handle_stop,
 )
 from vcorelib.paths.context import linked_to
+from vcorelib.platform import is_windows
 
 TestIteration = Callable[[int], bool]
 
@@ -103,7 +104,10 @@ def handle_interrupt_subprocess_test(idx: int) -> bool:
             time.sleep(0.2 * idx)
 
             # Send a platform-specific signal.
-            kill(proc.pid, getattr(signal, "CTRL_C_EVENT", signal.SIGINT))
+            if is_windows():
+                proc.terminate()
+            else:
+                kill(proc.pid, getattr(signal, "CTRL_C_EVENT", signal.SIGINT))
 
             # This will raise an exception if reached.
             with suppress(subprocess.TimeoutExpired):
