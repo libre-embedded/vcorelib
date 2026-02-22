@@ -56,7 +56,9 @@ def task_runner() -> None:
         name = temp.name
 
     try:
-        task = SubprocessExecStreamed("sleeper", name, args="")
+        task = SubprocessExecStreamed(
+            "sleeper", name, args="", start_new_session=True
+        )
 
         # Create an event-loop and ensure it's associated with the
         # main thread.
