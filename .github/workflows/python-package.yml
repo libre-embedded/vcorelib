@@ -44,7 +44,7 @@ jobs:
 
       - run: mk python-sa-types
 
-      - run: mk docs version=3.6.9
+      - run: mk docs version=3.6.10
         if: |
           matrix.python-version == '3.14'
           && matrix.system == 'ubuntu-latest'
@@ -76,7 +76,7 @@ jobs:
 
       - run: |
           mk python-release owner=libre-embedded \
-                            repo=vcorelib version=3.6.9
+                            repo=vcorelib version=3.6.10
         if: |
           matrix.python-version == '3.14'
           && matrix.system == 'ubuntu-latest'
