@@ -20,6 +20,8 @@ async def repeat_until(
     event triggered this function to clean up and exit.
     """
 
+    poll_signal = asyncio.Event()
+
     async def poller() -> None:
         """Poll the task at the requested period."""
 
@@ -27,16 +29,15 @@ async def repeat_until(
 
         do_await = iscoroutinefunction(task)
 
-        with suppress(asyncio.CancelledError):
-            while not event.is_set():
-                start = eloop.time()
+        while not event.is_set() and not poll_signal.is_set():
+            start = eloop.time()
 
-                if do_await:
-                    await task()  # type: ignore
-                else:
-                    task()
+            if do_await:
+                await task()  # type: ignore
+            else:
+                task()
 
-                await asyncio.sleep(max(0, period - (eloop.time() - start)))
+            await asyncio.sleep(max(0, period - (eloop.time() - start)))
 
     poll_task = asyncio.create_task(poller())
 
@@ -48,9 +49,7 @@ async def repeat_until(
         result = event.is_set()
 
     # Clean up.
-    if not poll_task.done():
-        poll_task.cancel()
-        with suppress(asyncio.CancelledError):
-            await poll_task
+    poll_signal.set()
+    await poll_task
 
     return result
