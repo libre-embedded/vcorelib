@@ -111,7 +111,7 @@ class AsyncMessageBus(LoggerMixin):
 
             # Scoped handlers.
             if has_scoped:
-                handlers = self.scoped_ro_handlers.setdefault(key, {})
+                handlers = self.scoped_ro_handlers[key]
                 for result, ident in zip(
                     await asyncio.gather(
                         *(x(payload) for x in handlers.values()),
